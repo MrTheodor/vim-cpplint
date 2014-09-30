@@ -35,6 +35,7 @@ By default the plugin support following file extensions:
 *.cc, *.h, *.cpp, *.cu, *.cuh
 
 You can change it by setting in .vimrc the variable: 
+
     let g:cpplint_extensions = "cpp,hpp,h,c,cc,cu,cuh"
 
 
