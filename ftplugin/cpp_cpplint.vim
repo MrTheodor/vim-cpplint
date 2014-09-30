@@ -26,6 +26,12 @@ if exists("g:cpplint_extensions")
     let s:cpplint_extensions=g:cpplint_extensions
 endif
 
+let s:cpplint_cmd_opts = ' --extensions=' . s:cpplint_extensions . ' '
+
+if exists('g:cpplint_line_length')
+    let s:cpplint_cmd_opts = s:cpplint_cmd_opts . ' --linelength=' . g:cpplint_line_length . ' '
+endif
+
 if !exists("*Cpplint()")
     function Cpplint()
         if !executable(s:cpplint_cmd)
@@ -47,15 +53,21 @@ if !exists("*Cpplint()")
 
         " perform the grep itself
         let &grepformat="%f:%l: %m"
-        let &grepprg=s:cpplint_cmd . ' --extensions=' . s:cpplint_extensions . ' '
+        let &grepprg=s:cpplint_cmd . s:cpplint_cmd_opts . ' '
         silent! grep! %
+        let has_results=1
+        for va in getqflist()
+            if va.text =~ "Total errors found: 0"
+                let has_results=0
+                break
+            endif
+        endfor
 
         " restore grep settings
         let &grepformat=l:old_gfm
         let &grepprg=l:old_gp
 
         " open cwindow
-        let has_results=getqflist() != []
         if has_results
             execute 'belowright copen'
             setlocal wrap
@@ -70,7 +82,7 @@ if !exists("*Cpplint()")
             " Show OK status
             hi Green ctermfg=green
             echohl Green
-            echon "cpplint.py check OK"
+            echon "cpplint.py check OK (status: " . has_results . ')'
             echohl
         endif
     endfunction
