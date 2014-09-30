@@ -3,17 +3,28 @@
 " Language:     C++ (ft=cpp)
 " Maintainer:   Thomas Chen <funorpain@gmail.com>
 " Version:      Vim 7 (may work with lower Vim versions, but not tested)
-" URL:          http://example.com/
 "
 " Code is borrowed from vim-flake8 and slightly modified.
 "
 " Only do this when not done yet for this buffer
+"
+" Running the Google cpplint.py code to validate the style according to:
+" http://google-styleguide.googlecode.com/svn/trunk/cppguide.html
+"
 if exists("b:loaded_cpplint_ftplugin")
     finish
 endif
 let b:loaded_cpplint_ftplugin=1
 
 let s:cpplint_cmd="cpplint.py"
+
+" extensions
+
+let s:cpplint_extensions="cc,h,cpp,cu,cuh"
+
+if exists("g:cpplint_extensions")
+    let s:cpplint_extensions=g:cpplint_extensions
+endif
 
 if !exists("*Cpplint()")
     function Cpplint()
@@ -36,7 +47,7 @@ if !exists("*Cpplint()")
 
         " perform the grep itself
         let &grepformat="%f:%l: %m"
-        let &grepprg=s:cpplint_cmd
+        let &grepprg=s:cpplint_cmd . ' --extensions=' . s:cpplint_extensions . ' '
         silent! grep! %
 
         " restore grep settings

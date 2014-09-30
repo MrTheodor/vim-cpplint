@@ -3,6 +3,8 @@ vim-cpplint
 `vim-cpplint` is a Vim plugin that runs the currently open file through
 cpplint.py, a static syntax and style checker for C++ source code.
 
+The code will be checked according to [Google C++ Style Guide ](http://google-styleguide.googlecode.com/svn/trunk/cppguide.html)
+
 
 Installation
 ------------
@@ -29,6 +31,14 @@ the `<F7>` key if so. For example, to remap it to `<F3>` instead, use:
     autocmd FileType cpp map <buffer> <F3> :call Cpplint()<CR>
 
 
+By default the plugin support following file extensions: 
+*.cc, *.h, *.cpp, *.cu, *.cuh
+
+You can change it by setting in .vimrc the variable: 
+    let g:cpplint_extensions = "cpp,hpp,h,c,cc,cu,cuh"
+
+
+
 Tips
 ----
 A tip might be to run the cpplint.py check every time you write a C++ file, to
@@ -36,3 +46,8 @@ enable this, add the following line to your `.vimrc` file (thanks
 [Godefroid](http://github.com/gotcha)!):
 
     autocmd BufWritePost *.h,*.cpp call Cpplint()
+
+False positives can be ignored by putting 
+
+    // NOLINT at the end of the line or 
+    // NOLINTNEXTLINE in the previous line.
