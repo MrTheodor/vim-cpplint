@@ -19,7 +19,6 @@ let b:loaded_cpplint_ftplugin=1
 let s:cpplint_cmd="cpplint.py"
 
 " extensions
-
 let s:cpplint_extensions="cc,h,cpp,cu,cuh"
 
 if exists("g:cpplint_extensions")
@@ -28,8 +27,14 @@ endif
 
 let s:cpplint_cmd_opts = ' --extensions=' . s:cpplint_extensions . ' '
 
+" line length
 if exists('g:cpplint_line_length')
     let s:cpplint_cmd_opts = s:cpplint_cmd_opts . ' --linelength=' . g:cpplint_line_length . ' '
+endif
+
+" filters
+if exists('g:cpplint_filter')
+    let s:cpplint_cmd_opts = s:cpplint_cmd_opts . ' --filter=' . g:cpplint_filter . ' '
 endif
 
 if !exists("*Cpplint()")
